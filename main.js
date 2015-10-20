@@ -1,14 +1,18 @@
 (function() {
-  // debug at air
-  // var MANIFEST_URL = 'app://33bfa81b-9b3b-8545-80d2-76ca07625ffc/manifest.webapp';
-  // online version
-  var MANIFEST_URL = 'https://john-hu.github.io/fxos-text-battery/manifest.webapp';
+  var APP_NAME = 'Battery Percentage';
 
   function TextBatteryLevel(addon) {
     this.trailCount = 5;
     // this part should be moved to css file, but the CSS injection feature is
     // broken now.
     this.style = document.createElement('style');
+    this.style.id = 'text-battery-style';
+
+    // Remove any previous installs of the battery styling.
+    var previousStyle = document.getElementById(this.style.id);
+    if (previousStyle) {
+      previousStyle.remove();
+    }
     this.style.textContent = `
       .sb-icon-battery[data-battery-level]:after {
         content: attr(data-battery-level);
@@ -17,19 +21,20 @@
         width: 2.5rem;
         height: 1.6rem;
         line-height: 1.6rem;
-        color: black;
+        color: red;
+        text-shadow: none;
+        font-weight: bold;
+        text-shadow:
+          0 0 0.2rem white,
+          0 0 0.1rem white,
+          0 0 0.05rem white,
+          0 0 0.025rem white,
+          0 0 0.01rem white,
+          0 0 0 white;
       }
 
-      .sb-icon-battery[data-battery-level][data-charging="true"]:after {
-        content: attr(data-battery-level);
-        text-align: left;
-        position: absolute;
-        width: 2.5rem;
-        height: 1.6rem;
-        line-height: 1.6rem;
-        color: blue;
-        padding-left: 0.1rem;
-        font-size: 0.8rem;
+      #statusbar .sb-icon-battery[data-battery-level][data-charging="true"]:after {
+        content: "+"attr(data-battery-level);
       }`;
     this.inited = false;
   }
@@ -68,6 +73,10 @@
   TextBatteryLevel.prototype.uninit = function() {
     if (!this.battery) {
       return;
+    }
+    var previousStyle = document.getElementById(this.style.id);
+    if (previousStyle) {
+      previousStyle.remove();
     }
     this.battery.removeEventListener('levelchange', this);
     this.updateDataset(null);
@@ -110,7 +119,7 @@
   }
 
   TextBatteryLevelMgmt.prototype.handleEvent = function(e) {
-    if (e.application.manifestURL !== MANIFEST_URL) {
+    if (e.application.name !== APP_NAME) {
       return;
     }
 

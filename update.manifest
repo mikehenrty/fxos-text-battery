@@ -1,0 +1,14 @@
+{
+  "name": "Battery Percentage",
+  "description": "Display battery level in text",
+  "developer": {
+    "name": "John Hu"
+  },
+  "version": "1.0",
+  "package_path": "extension.zip",
+  "icons": {
+    "128": "/icons/128.png",
+    "256": "/icons/256.png",
+    "512": "/icons/512.png"
+  }
+}

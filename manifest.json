@@ -1,0 +1,16 @@
+{
+  "name": "Battery Percentage",
+  "description": "Display battery level in text",
+  "manifest_version": 1,
+  "version": "1.0",
+  "author": "John Hu",
+  "content_scripts": [{
+      "matches": ["app://system.gaiamobile.org/index.html"],
+      "js": ["main.js"]
+  }],
+  "icons": {
+    "128": "/icons/128.png",
+    "256": "/icons/256.png",
+    "512": "/icons/512.png"
+  }
+}
